@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NBo-4r-NEn">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,16 +15,89 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MPQuizzer_" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qfj-UF-feb">
+                                <rect key="frame" x="40" y="78" width="240" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="8Cc-24-Bwz"/>
+                                    <constraint firstAttribute="width" secondItem="qfj-UF-feb" secondAttribute="height" multiplier="240:43" id="JWL-gE-mF6"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FIC-76-bIA">
+                                <rect key="frame" x="160" y="176" width="120" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="FIC-76-bIA" secondAttribute="height" multiplier="1:1" id="l3S-fl-4zG"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Goh-yD-PE4" userLabel="Single PlayerIV">
+                                <rect key="frame" x="40" y="176" width="120" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Goh-yD-PE4" secondAttribute="height" multiplier="1:1" id="83E-pp-1co"/>
+                                    <constraint firstAttribute="width" constant="120" id="k9m-Gt-0Iq"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R9w-Gy-w8W">
+                                <rect key="frame" x="40" y="296" width="120" height="30"/>
+                                <state key="normal" title="Single Player"/>
+                                <connections>
+                                    <action selector="singlePlayerButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ofS-Im-d86"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GNn-Mw-eSa">
+                                <rect key="frame" x="160" y="296" width="120" height="30"/>
+                                <state key="normal" title="Multi Player"/>
+                                <connections>
+                                    <action selector="multiPlayerButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lTx-sp-fVc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BwQ-NK-amf">
+                                <rect key="frame" x="126" y="334" width="69" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Start Quiz"/>
+                                <connections>
+                                    <action selector="startQuizButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2ku-GR-6ff"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="FIC-76-bIA" firstAttribute="bottom" secondItem="Goh-yD-PE4" secondAttribute="bottom" id="4S2-Ia-l6A"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FIC-76-bIA" secondAttribute="trailing" constant="40" id="6TW-rw-y2z"/>
+                            <constraint firstItem="GNn-Mw-eSa" firstAttribute="bottom" secondItem="R9w-Gy-w8W" secondAttribute="bottom" id="9P6-bu-gWS"/>
+                            <constraint firstItem="qfj-UF-feb" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="14" id="BeO-lf-q9X"/>
+                            <constraint firstItem="GNn-Mw-eSa" firstAttribute="leading" secondItem="FIC-76-bIA" secondAttribute="leading" id="VIf-d5-gaw"/>
+                            <constraint firstItem="R9w-Gy-w8W" firstAttribute="trailing" secondItem="Goh-yD-PE4" secondAttribute="trailing" id="ZU8-AG-uid"/>
+                            <constraint firstItem="R9w-Gy-w8W" firstAttribute="top" secondItem="Goh-yD-PE4" secondAttribute="bottom" id="eQY-cJ-yJU"/>
+                            <constraint firstItem="Goh-yD-PE4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="ivL-Hd-j71"/>
+                            <constraint firstItem="FIC-76-bIA" firstAttribute="top" secondItem="Goh-yD-PE4" secondAttribute="top" id="m5G-Lq-5rW"/>
+                            <constraint firstItem="qfj-UF-feb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="nDd-0h-Oaw"/>
+                            <constraint firstItem="GNn-Mw-eSa" firstAttribute="top" secondItem="R9w-Gy-w8W" secondAttribute="top" id="osf-sk-KD9"/>
+                            <constraint firstItem="R9w-Gy-w8W" firstAttribute="leading" secondItem="Goh-yD-PE4" secondAttribute="leading" id="p4Y-5K-9bM"/>
+                            <constraint firstItem="Goh-yD-PE4" firstAttribute="top" secondItem="qfj-UF-feb" secondAttribute="bottom" constant="55" id="pOx-xa-jJk"/>
+                            <constraint firstItem="GNn-Mw-eSa" firstAttribute="trailing" secondItem="FIC-76-bIA" secondAttribute="trailing" id="sDv-eJ-SuF"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="bL7-9c-zOi"/>
+                    <navigationItem key="navigationItem" id="bL7-9c-zOi">
+                        <barButtonItem key="rightBarButtonItem" title="Connect" id="O99-Wh-o2w">
+                            <connections>
+                                <action selector="connectBarButtonTapped:" destination="BYZ-38-t0r" id="HA0-A1-TFa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="multiPlayerButton" destination="GNn-Mw-eSa" id="TYZ-8D-EKH"/>
+                        <outlet property="multiPlayerIV" destination="FIC-76-bIA" id="VV7-pU-9Mh"/>
+                        <outlet property="singlePlayerButton" destination="R9w-Gy-w8W" id="kAo-dR-md5"/>
+                        <outlet property="singlePlayerIV" destination="Goh-yD-PE4" id="gm7-a8-gkN"/>
+                        <outlet property="titleView" destination="qfj-UF-feb" id="9t8-4k-4ET"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1076" y="133.5832083958021"/>
+            <point key="canvasLocation" x="1074.375" y="132.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WnN-3I-g3O">
@@ -31,7 +105,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NBo-4r-NEn" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hYF-ad-mrU">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
