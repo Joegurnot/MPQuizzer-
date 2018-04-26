@@ -64,9 +64,14 @@ class SinglePlayerVC: UIViewController {
     @IBAction func getJsonTapped(_ sender: UIButton) {
         myJSONHandler.testGrabJSON()
         if (myJSONHandler.gameOver) {
-            let temporaryAlert = UIAlertController(title: "ALERT", message: "Handle end of game", preferredStyle: .alert)
-            temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-            self.present(temporaryAlert, animated: true, completion: nil)
+            sender.isUserInteractionEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                sender.isUserInteractionEnabled = true
+                let temporaryAlert = UIAlertController(title: "ALERT", message: "Handle end of game", preferredStyle: .alert)
+                temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+                self.present(temporaryAlert, animated: true, completion: nil)
+            }
+            
         }
     }
     
