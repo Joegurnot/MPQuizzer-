@@ -18,22 +18,11 @@ class JSONHandler {
     var currentURLIndex: Int = 0
     let arrayOfURLs: [String] = ["http://www.people.vcu.edu/~ebulut/jsonFiles/quiz1.json", "http://www.people.vcu.edu/~ebulut/jsonFiles/quiz2.json"]
     
-    //set this after grabbing the JSON data; it will be the value for the key "number"
+    //used to track the current question
     var currentQuestion: Int = 0
     
     //set this after grabbing the JSON data; it will be the value for the key "numberOfQuestions"
     var numQuestions: Int?
-    
-    //set this after grabbing the JSON data; it will be the value for the key "questionSentence"
-    var questionSentence: String!
-    
-    //set this after grabbing the JSON data; it will be the value for the key "options"; it is another dictionary
-    var answerOptions: String!
-    
-    //var aOption: String!
-    //var bOption: String!
-    //var cOption: String!
-    //var dOption: String!
     
     //tracks questions in the form "Question \(currentQuestion) / \(numQuestions)"
     var questionCounterLbl: UILabel!
@@ -90,28 +79,21 @@ class JSONHandler {
         if let optNumQuestions = numQuestions {
             if currentQuestion > optNumQuestions {
                 currentQuestion = 1
-                
-                //currentURLIndex += 1
-                //if (currentURLIndex == 2) {
-                //    gameOver = true
-                //}
             }
         }
         
         let urlString = arrayOfURLs[currentURLIndex]
-        //let urlString = "http://www.people.vcu.edu/~ebulut/jsonFiles/quiz1.json"
-        //print(urlString)
         
         let url = URL(string: urlString)
         
-        //let session = self.sharedSession
-        let session = URLSession.shared
+        let session = self.sharedSession
+        //let session = URLSession.shared
         
         let task = session.dataTask(with: url!) { (data, response, error) in
-            print("1.  inside testGrabJSON")
+            //print("1.  inside testGrabJSON")
             if let result = data{
                 
-                print("2.  inside testGrabJSON")
+                //print("2.  inside testGrabJSON")
                 //print(result)
                 do {
                     let json = try JSONSerialization.jsonObject(with: result, options: .allowFragments)
