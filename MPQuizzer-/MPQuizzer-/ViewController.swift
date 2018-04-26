@@ -110,15 +110,14 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
         switch singleOrMulti {
         case "single":
             print("starting with single player")
+            self.performSegue(withIdentifier: "segueToSinglePlayerVC", sender: self)
         case "multi":
             print("starting with multiple players")
         default:
             print("unexpected default in startQuizButtonTapped, check value of \"singleOrMulti\"")
         }
         
-        let temporaryAlert = UIAlertController(title: "ALERT", message: "Implement segue to next screen", preferredStyle: .alert)
-        temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        self.present(temporaryAlert, animated: true, completion: nil)
+        
         
     }
     
