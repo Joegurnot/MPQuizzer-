@@ -64,9 +64,6 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
         session.delegate = self
         browser.delegate = self
         
-        assistant.start()
-        present(browser, animated: true)
-
     }
     
     func startHosting(action: UIAlertAction){
@@ -99,10 +96,12 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
     
     
     @IBAction func connectBarButtonTapped(_ sender: UIBarButtonItem) {
-        let temporaryAlert = UIAlertController(title: "ALERT", message: "Implement multiPeer Connectivity", preferredStyle: .alert)
+        assistant.start()
+        present(browser, animated: true)
+        /*  let temporaryAlert = UIAlertController(title: "ALERT", message: "Implement multiPeer Connectivity", preferredStyle: .alert)
         temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.present(temporaryAlert, animated: true, completion: nil)
-        
+        */
     }
     
     
@@ -155,5 +154,12 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
     
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         
-    }}
+    }
+    
+    func sendLetter(String: UILabel) {
+        if session.connectedPeers.count > 0 {
+            if let letter =
+        }
+    }
+}
 
