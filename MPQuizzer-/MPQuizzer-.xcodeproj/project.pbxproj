@@ -7,27 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		701CEB7120920BE200A25B9B /* multiPlayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 701CEB7020920BE200A25B9B /* multiPlayer.png */; };
+		701CEB7320920BFD00A25B9B /* singlePlayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 701CEB7220920BFD00A25B9B /* singlePlayer.png */; };
+		701CEB7520920C0500A25B9B /* Title.png in Resources */ = {isa = PBXBuildFile; fileRef = 701CEB7420920C0500A25B9B /* Title.png */; };
+		701CEB772092C36300A25B9B /* MultiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701CEB762092C36300A25B9B /* MultiViewController.swift */; };
 		B051490C208EB43A00CA0CC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B051490B208EB43A00CA0CC3 /* AppDelegate.swift */; };
 		B051490E208EB43A00CA0CC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B051490D208EB43A00CA0CC3 /* ViewController.swift */; };
 		B0514911208EB43A00CA0CC3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B051490F208EB43A00CA0CC3 /* Main.storyboard */; };
 		B0514913208EB43B00CA0CC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0514912208EB43B00CA0CC3 /* Assets.xcassets */; };
-		B051491F208EC7B400CA0CC3 /* Title.png in Resources */ = {isa = PBXBuildFile; fileRef = B051491E208EC7B400CA0CC3 /* Title.png */; };
-		B0514921208ECB0400CA0CC3 /* singlePlayer.png in Resources */ = {isa = PBXBuildFile; fileRef = B0514920208ECB0400CA0CC3 /* singlePlayer.png */; };
-		B0514923208ECFFB00CA0CC3 /* multiPlayer.png in Resources */ = {isa = PBXBuildFile; fileRef = B0514922208ECFFB00CA0CC3 /* multiPlayer.png */; };
 		B0B5F96920913CFA009A2F6D /* JSONHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B5F96820913CFA009A2F6D /* JSONHandler.swift */; };
 		B0B5F96D209147F4009A2F6D /* SinglePlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B5F96C209147F4009A2F6D /* SinglePlayerVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		701CEB7020920BE200A25B9B /* multiPlayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = multiPlayer.png; sourceTree = "<group>"; };
+		701CEB7220920BFD00A25B9B /* singlePlayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singlePlayer.png; sourceTree = "<group>"; };
+		701CEB7420920C0500A25B9B /* Title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Title.png; sourceTree = "<group>"; };
+		701CEB762092C36300A25B9B /* MultiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiViewController.swift; sourceTree = "<group>"; };
 		B0514908208EB43A00CA0CC3 /* MPQuizzer-.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MPQuizzer-.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B051490B208EB43A00CA0CC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B051490D208EB43A00CA0CC3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B0514910208EB43A00CA0CC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B0514912208EB43B00CA0CC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B0514917208EB43B00CA0CC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B051491E208EC7B400CA0CC3 /* Title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Title.png; sourceTree = "<group>"; };
-		B0514920208ECB0400CA0CC3 /* singlePlayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singlePlayer.png; sourceTree = "<group>"; };
-		B0514922208ECFFB00CA0CC3 /* multiPlayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = multiPlayer.png; sourceTree = "<group>"; };
 		B0B5F96820913CFA009A2F6D /* JSONHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONHandler.swift; sourceTree = "<group>"; };
 		B0B5F96C209147F4009A2F6D /* SinglePlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePlayerVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,6 +72,7 @@
 				B0514912208EB43B00CA0CC3 /* Assets.xcassets */,
 				B0514917208EB43B00CA0CC3 /* Info.plist */,
 				B051491D208EC58000CA0CC3 /* Images */,
+				701CEB762092C36300A25B9B /* MultiViewController.swift */,
 			);
 			path = "MPQuizzer-";
 			sourceTree = "<group>";
@@ -77,9 +80,9 @@
 		B051491D208EC58000CA0CC3 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				B051491E208EC7B400CA0CC3 /* Title.png */,
-				B0514920208ECB0400CA0CC3 /* singlePlayer.png */,
-				B0514922208ECFFB00CA0CC3 /* multiPlayer.png */,
+				701CEB7420920C0500A25B9B /* Title.png */,
+				701CEB7220920BFD00A25B9B /* singlePlayer.png */,
+				701CEB7020920BE200A25B9B /* multiPlayer.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -142,10 +145,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0514921208ECB0400CA0CC3 /* singlePlayer.png in Resources */,
-				B0514923208ECFFB00CA0CC3 /* multiPlayer.png in Resources */,
+				701CEB7120920BE200A25B9B /* multiPlayer.png in Resources */,
+				701CEB7520920C0500A25B9B /* Title.png in Resources */,
 				B0514913208EB43B00CA0CC3 /* Assets.xcassets in Resources */,
-				B051491F208EC7B400CA0CC3 /* Title.png in Resources */,
+				701CEB7320920BFD00A25B9B /* singlePlayer.png in Resources */,
 				B0514911208EB43A00CA0CC3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B051490E208EB43A00CA0CC3 /* ViewController.swift in Sources */,
+				701CEB772092C36300A25B9B /* MultiViewController.swift in Sources */,
 				B0B5F96920913CFA009A2F6D /* JSONHandler.swift in Sources */,
 				B051490C208EB43A00CA0CC3 /* AppDelegate.swift in Sources */,
 				B0B5F96D209147F4009A2F6D /* SinglePlayerVC.swift in Sources */,
