@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreMotion
 
 class SinglePlayerVC: UIViewController {
     
@@ -15,6 +16,8 @@ class SinglePlayerVC: UIViewController {
     var myNumQuestions: Int!
     
     var correctAnswer: String!
+    
+    var motionManager = CMMotionManager()
 
     @IBOutlet weak var numQuestionsLbl: UILabel!
     
@@ -67,6 +70,11 @@ class SinglePlayerVC: UIViewController {
         
 
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        motionManager.deviceMotionUpdateInterval = 1/60
+        motionManager.startDeviceMotionUpdates(using: .xArbitraryZVertical)
     }
     
     @objc func timerHandler() {
@@ -301,5 +309,32 @@ class SinglePlayerVC: UIViewController {
             self.scoreLbl.frame.origin.x -= 50
         }, completion: nil)
     }
+    
+    override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
+        
+        if motion == .motionShake {
+            var rand = arc4random_uniform(4)
+            while((rand == 0 && aLbl.backgroundColor == UIColor.yellow) ||
+                (rand == 1 && bLbl.backgroundColor == UIColor.yellow) ||
+                (rand == 2 && cLbl.backgroundColor == UIColor.yellow) ||
+                (rand == 3 && dLbl.backgroundColor == UIColor.yellow)) {
+                    rand = arc4random_uniform(4)
+            }
+            switch rand {
+            case 0:
+                aLabelTap(sender: aLbl)
+            case 1:
+                bLabelTap(sender: bLbl)
+            case 2:
+                cLabelTap(sender: cLbl)
+            case 3:
+                dLabelTap(sender: dLbl)
+            default:
+                print("Unexpected default in shake gesture")
+            }
+        }
+    }
+    
+    
     
 }

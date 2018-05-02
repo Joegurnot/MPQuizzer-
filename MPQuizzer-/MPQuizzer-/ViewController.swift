@@ -158,7 +158,7 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
     
     func sendLetter(String: UILabel) {
         if session.connectedPeers.count > 0 {
-            if let letter =
+            //if let letter =
         }
     }
 }
