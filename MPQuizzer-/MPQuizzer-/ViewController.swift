@@ -9,18 +9,16 @@
 import UIKit
 import MultipeerConnectivity
 
+var myMultipeerHandler: MultipeerHandler = MultipeerHandler()
+
 class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessionDelegate {
     
-    var session: MCSession!
-    var peerID: MCPeerID!
+    //var session: MCSession!
+    //var peerID: MCPeerID!
     
-    var browser: MCBrowserViewController!
-    var assistant: MCAdvertiserAssistant!
+    //var browser: MCBrowserViewController!
+    //var assistant: MCAdvertiserAssistant!
     
-    
-    
-    
-
     @IBOutlet weak var titleView: UIImageView!
     @IBOutlet weak var singlePlayerIV: UIImageView!
     @IBOutlet weak var multiPlayerIV: UIImageView!
@@ -56,13 +54,15 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
     }
     
     func setUpConnectivity() {
-        self.peerID = MCPeerID(displayName: UIDevice.current.name)
-        self.session = MCSession(peer: peerID)
-        self.browser = MCBrowserViewController(serviceType: "MPQuizzer", session: session)
-        self.assistant = MCAdvertiserAssistant(serviceType: "MPQuizzer", discoveryInfo: nil, session: session)
+        myMultipeerHandler.peerID = MCPeerID(displayName: UIDevice.current.name)
+        myMultipeerHandler.session = MCSession(peer: myMultipeerHandler.peerID)
+        myMultipeerHandler.browser = MCBrowserViewController(serviceType: "MPQuizzer", session: myMultipeerHandler.session)
+        myMultipeerHandler.assistant = MCAdvertiserAssistant(serviceType: "MPQuizzer", discoveryInfo: nil, session: myMultipeerHandler.session)
         
-        session.delegate = self
-        browser.delegate = self
+        myMultipeerHandler.session.delegate = self
+        myMultipeerHandler.browser.delegate = self
+        
+        myMultipeerHandler.assistant.start()
         
     }
     
@@ -96,8 +96,8 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
     
     
     @IBAction func connectBarButtonTapped(_ sender: UIBarButtonItem) {
-        assistant.start()
-        present(browser, animated: true)
+        
+        present(myMultipeerHandler.browser, animated: true)
         /*  let temporaryAlert = UIAlertController(title: "ALERT", message: "Implement multiPeer Connectivity", preferredStyle: .alert)
         temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.present(temporaryAlert, animated: true, completion: nil)
@@ -112,6 +112,21 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
             self.performSegue(withIdentifier: "segueToSinglePlayerVC", sender: self)
         case "multi":
             print("starting with multiple players")
+            if (myMultipeerHandler.session.connectedPeers.count == 0) {
+                let temporaryAlert = UIAlertController(title: "ALERT", message: "No Peers Connected", preferredStyle: .alert)
+                temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+                self.present(temporaryAlert, animated: true, completion: nil)
+            }
+            else if (myMultipeerHandler.session.connectedPeers.count > 3) {
+                let temporaryAlert = UIAlertController(title: "ALERT", message: "Connected Peers Must Be Fewer Than Three", preferredStyle: .alert)
+                temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+                self.present(temporaryAlert, animated: true, completion: nil)
+            }
+            else {
+                sendStart()
+                self.performSegue(withIdentifier: "segueToMultiPlayerVC", sender: self)
+            }
+            
         default:
             print("unexpected default in startQuizButtonTapped, check value of \"singleOrMulti\"")
         }
@@ -141,7 +156,13 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        
+        DispatchQueue.main.async {
+            if let receivedString = NSKeyedUnarchiver.unarchiveObject(with: data) as? String {
+                if (receivedString == "START") {
+                    self.performSegue(withIdentifier: "segueToMultiPlayerVC", sender: self)
+                }
+            }
+        }
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
@@ -156,10 +177,26 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
         
     }
     
+    func sendStart() {
+        
+        let msg: String = "START"
+        let dataToSend = NSKeyedArchiver.archivedData(withRootObject: msg)
+        do {
+            try myMultipeerHandler.session.send(dataToSend, toPeers: myMultipeerHandler.session.connectedPeers, with: .unreliable)
+        }
+        catch let err {
+            print("Error sending start signal")
+        }
+        
+    }
+    
+    
+    /*
     func sendLetter(String: UILabel) {
-        if session.connectedPeers.count > 0 {
+        if myMultipeerHandler.session.connectedPeers.count > 0 {
             //if let letter =
         }
     }
+     */
 }
 
