@@ -43,6 +43,12 @@ class SinglePlayerVC: UIViewController {
     var firstTappedLbl: UILabel?
     var secondTappedLbl: UILabel?
     
+    var attitude: CMAttitude!
+    var startAttitude: CMAttitude!
+    var firstPosition: Bool = true
+    
+    var motionTimer: Timer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -75,6 +81,8 @@ class SinglePlayerVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         motionManager.deviceMotionUpdateInterval = 1/60
         motionManager.startDeviceMotionUpdates(using: .xArbitraryZVertical)
+        
+        motionTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateDeviceMotion), userInfo: nil, repeats: true)
     }
     
     @objc func timerHandler() {
@@ -90,6 +98,100 @@ class SinglePlayerVC: UIViewController {
             nextQuestion()
         }
         print("secondsLeft: \(secondsLeft)")
+    }
+    
+    @objc func updateDeviceMotion(){
+        
+        if let data = motionManager.deviceMotion {
+            
+            attitude = data.attitude
+            
+            if (firstPosition == true) {
+                startAttitude = attitude
+                firstPosition = false
+            }
+            
+            let userAcceleration = data.userAcceleration
+            print("\n\nZ ACC: \(userAcceleration.z)")
+            if (userAcceleration.z < -2.5) {
+                if let tempFirstTap = firstTappedLbl {
+                    switch tempFirstTap {
+                    case aLbl:
+                        aLabelTap(sender: aLbl)
+                    case bLbl:
+                        bLabelTap(sender: bLbl)
+                    case cLbl:
+                        cLabelTap(sender: cLbl)
+                    case dLbl:
+                        dLabelTap(sender: dLbl)
+                    default:
+                        print("Unexpected default in z-accel")
+                    }
+                }
+            }
+            
+            //let gravity = data.gravity
+            
+            //let rotation = data.rotationRate
+            
+            print("pitch: \(attitude.pitch), roll: \(attitude.roll), yaw: \(attitude.yaw)")
+            
+            
+            //var str = "Pitch: \(attitude.pitch)\n Roll: \(attitude.roll) \nYaw: \(attitude.yaw)"
+            
+            if ((startAttitude.pitch - attitude.pitch) < -0.25) {
+                print("\n\nPITCH UP!")
+                pitchUP()
+            }
+            else if ((startAttitude.pitch - attitude.pitch) > 0.25) {
+                print("\n\nPITCH DOWN!")
+                pitchDown()
+            }
+            
+            if ((startAttitude.roll - attitude.roll) < -0.2) {
+                print("\n\nROLL RIGHT!")
+                rollRight()
+            }
+            else if ((startAttitude.roll - attitude.roll) > 0.8) {
+                print("\n\nROLL LEFT!")
+                rollLeft()
+            }
+        }
+    }
+    
+    func pitchUP() {
+        if (aLbl.backgroundColor == UIColor.yellow) {
+            cLabelTap(sender: cLbl)
+        }
+        else if (bLbl.backgroundColor == UIColor.yellow) {
+            dLabelTap(sender: dLbl)
+        }
+    }
+    func pitchDown() {
+        if (cLbl.backgroundColor == UIColor.yellow) {
+            aLabelTap(sender: aLbl)
+        }
+        else if (dLbl.backgroundColor == UIColor.yellow) {
+            bLabelTap(sender: bLbl)
+        }
+    }
+    
+    func rollLeft() {
+        if (bLbl.backgroundColor == UIColor.yellow) {
+            aLabelTap(sender: aLbl)
+        }
+        else if (dLbl.backgroundColor == UIColor.yellow) {
+            cLabelTap(sender: cLbl)
+        }
+    }
+    
+    func rollRight() {
+        if (aLbl.backgroundColor == UIColor.yellow) {
+            bLabelTap(sender: bLbl)
+        }
+        else if (cLbl.backgroundColor == UIColor.yellow) {
+            dLabelTap(sender: dLbl)
+        }
     }
 
     func updateScore() {
@@ -175,9 +277,14 @@ class SinglePlayerVC: UIViewController {
         if let tempFirstTappedLbl = firstTappedLbl {
             if tempFirstTappedLbl == aLbl {
                 disableChoiceLbls()
-                aLbl.backgroundColor = UIColor.blue
-                checkSubmissionForCorrectness(lbl: aLbl)
-                print("Submit: \(tempFirstTappedLbl.text!)")
+                if (aLbl.backgroundColor == UIColor.blue) {
+                    
+                }
+                else {
+                    aLbl.backgroundColor = UIColor.blue
+                    checkSubmissionForCorrectness(lbl: aLbl)
+                    print("Submit: \(tempFirstTappedLbl.text!)")
+                }
             }
             else {
                 firstTappedLbl = aLbl
@@ -195,9 +302,14 @@ class SinglePlayerVC: UIViewController {
         if let tempFirstTappedLbl = firstTappedLbl {
             if tempFirstTappedLbl == bLbl {
                 disableChoiceLbls()
-                bLbl.backgroundColor = UIColor.blue
-                checkSubmissionForCorrectness(lbl: bLbl)
-                print("Submit: \(tempFirstTappedLbl.text!)")
+                if (bLbl.backgroundColor == UIColor.blue) {
+                    
+                }
+                else {
+                    bLbl.backgroundColor = UIColor.blue
+                    checkSubmissionForCorrectness(lbl: bLbl)
+                    print("Submit: \(tempFirstTappedLbl.text!)")
+                }
             }
             else {
                 firstTappedLbl = bLbl
@@ -215,9 +327,14 @@ class SinglePlayerVC: UIViewController {
         if let tempFirstTappedLbl = firstTappedLbl {
             if tempFirstTappedLbl == cLbl {
                 disableChoiceLbls()
-                cLbl.backgroundColor = UIColor.blue
-                checkSubmissionForCorrectness(lbl: cLbl)
-                print("Submit: \(tempFirstTappedLbl.text!)")
+                if (cLbl.backgroundColor == UIColor.blue) {
+                    
+                }
+                else {
+                    cLbl.backgroundColor = UIColor.blue
+                    checkSubmissionForCorrectness(lbl: cLbl)
+                    print("Submit: \(tempFirstTappedLbl.text!)")
+                }
             }
             else {
                 firstTappedLbl = cLbl
@@ -235,9 +352,14 @@ class SinglePlayerVC: UIViewController {
         if let tempFirstTappedLbl = firstTappedLbl {
             if tempFirstTappedLbl == dLbl {
                 disableChoiceLbls()
-                dLbl.backgroundColor = UIColor.blue
-                checkSubmissionForCorrectness(lbl: dLbl)
-                print("Submit: \(tempFirstTappedLbl.text!)")
+                if (dLbl.backgroundColor == UIColor.blue) {
+                    
+                }
+                else {
+                    dLbl.backgroundColor = UIColor.blue
+                    checkSubmissionForCorrectness(lbl: dLbl)
+                    print("Submit: \(tempFirstTappedLbl.text!)")
+                }
             }
             else {
                 firstTappedLbl = dLbl
