@@ -38,6 +38,8 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     
     @IBOutlet weak var timerLbl: UILabel!
     
+    @IBOutlet weak var playAgainBtn: UIButton!
+    
     var hiddenCorrectAnswerLbl: UILabel = UILabel(frame: CGRect(x: 1, y: 1, width: 1, height: 1))
     
     var myJSONHandler = JSONHandler()
@@ -55,8 +57,8 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     var firstPosition: Bool = true
     
     var timer: Timer!
-    //var secondsLeft: Int = 20
-    var secondsLeft: Int = 5
+    var secondsLeft: Int = 20
+    //var secondsLeft: Int = 5
     
     var firstTappedLbl: UILabel?
     var secondTappedLbl: UILabel?
@@ -70,6 +72,9 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     var pOneAnswer: String!
     var pTwoAnswer: String!
     var pThreeAnswer: String!
+    
+    var numPlayers: Int!
+    var numAnswers: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,6 +101,10 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
         
         print("\n\n\(myMultipeerHandler.session.connectedPeers)")
         
+        numPlayers = myMultipeerHandler.session.connectedPeers.count + 1
+        numAnswers = 0
+        
+        
         updatePlayerImages()
         
         nextQuestion()
@@ -107,6 +116,27 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
         
         motionTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateDeviceMotion), userInfo: nil, repeats: true)
     }
+    
+    
+    @IBAction func playAgainTapped(_ sender: UIButton) {
+        self.resetScores()
+        self.unsetPlayerAnswers()
+        self.myJSONHandler.currentQuestion = 0
+        self.myJSONHandler.currentURLIndex += 1
+        self.myJSONHandler.gameOver = false
+        self.enableChoiceLbls()
+        self.unsetFirstAndSecondTap()
+        let msg: String = "PLAY_AGAIN"
+        let strToSend = NSKeyedArchiver.archivedData(withRootObject: msg)
+        do {
+            try myMultipeerHandler.session.send(strToSend, toPeers: myMultipeerHandler.session.connectedPeers, with: .unreliable)
+        }
+        catch let err {
+            print("error: \(err)")
+        }
+        self.nextQuestion()
+    }
+    
     
     @objc func updateDeviceMotion(){
         
@@ -266,22 +296,41 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         DispatchQueue.main.async {
             if let receivedData = NSKeyedUnarchiver.unarchiveObject(with: data) as? String {
-                for i in 0..<myMultipeerHandler.session.connectedPeers.count {
-                    if (peerID == myMultipeerHandler.session.connectedPeers[i]) {
-                        switch i {
-                        case 0:
-                            self.pOneAnswer = receivedData
-                        case 1:
-                            self.pTwoAnswer = receivedData
-                        case 2:
-                            self.pThreeAnswer = receivedData
-                        default:
-                            print("unexpected default when receiving string data")
+                if (receivedData == "PLAY_AGAIN") {
+                    self.resetScores()
+                    self.unsetPlayerAnswers()
+                    self.myJSONHandler.currentQuestion = 0
+                    self.myJSONHandler.currentURLIndex += 1
+                    self.myJSONHandler.gameOver = false
+                    self.enableChoiceLbls()
+                    self.unsetFirstAndSecondTap()
+                    self.nextQuestion()
+                }
+                else {
+                    for i in 0..<myMultipeerHandler.session.connectedPeers.count {
+                        if (peerID == myMultipeerHandler.session.connectedPeers[i]) {
+                            switch i {
+                            case 0:
+                                self.pOneAnswer = receivedData
+                                self.pOneAnswerLbl.text = "\(receivedData)"
+                                self.numAnswers += 1
+                            case 1:
+                                self.pTwoAnswer = receivedData
+                                self.pTwoAnswerLbl.text = "\(receivedData)"
+                                self.numAnswers += 1
+                            case 2:
+                                self.pThreeAnswer = receivedData
+                                self.pThreeAnswerLbl.text = "\(receivedData)"
+                                self.numAnswers += 1
+                            default:
+                                print("unexpected default when receiving string data")
+                            }
+                            
                         }
-                        
                     }
                 }
             }
+            
             if let receivedData = NSKeyedUnarchiver.unarchiveObject(with: data) as? Bool {
                 for i in 0..<myMultipeerHandler.session.connectedPeers.count {
                     if (peerID == myMultipeerHandler.session.connectedPeers[i]) {
@@ -356,22 +405,19 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     @objc func timerHandler() {
         timerLbl.text = "Seconds: \(secondsLeft)"
         secondsLeft -= 1
-        if secondsLeft == -1 {
+        if secondsLeft == 0 || numAnswers == numPlayers {
             timer.invalidate()
-            //secondsLeft = 20
-            secondsLeft = 5
+            secondsLeft = 20
+            //secondsLeft = 5
             
             handleEndOfQuestion()
             Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(endOfQuestionTimerHandler), userInfo: nil, repeats: false)
-            
-            //enableChoiceLbls()
-            //unsetFirstAndSecondTap()
-            //nextQuestion()
         }
         print("secondsLeft: \(secondsLeft)")
     }
     
     @objc func endOfQuestionTimerHandler() {
+        //numAnswers = 0
         enableChoiceLbls()
         unsetFirstAndSecondTap()
         nextQuestion()
@@ -380,34 +426,33 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     @objc func lastQuestionTimerHandler() {
         timerLbl.text = "Seconds: \(secondsLeft)"
         secondsLeft -= 1
-        if (secondsLeft == -1) {
+        if (secondsLeft == 0 || numAnswers == numPlayers) {
             timer.invalidate()
-            //secondsLeft = 20
-            secondsLeft = 5
-            
+            secondsLeft = 20
+            //secondsLeft = 5
+            handleEndOfQuestion()
             gameOverHandler()
         }
     }
     
     @objc func gameOverHandler() {
-        let temporaryAlert = UIAlertController(title: "ALERT", message: "Handle end of game", preferredStyle: .alert)
-        //temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        temporaryAlert.addAction(UIAlertAction(title: "Quit", style: .default, handler: { (alert: UIAlertAction!) in
-            myMultipeerHandler.session.disconnect()
-            self.performSegue(withIdentifier: "unwindToVC", sender: self)
-        }))
-        temporaryAlert.addAction(UIAlertAction(title: "Play Again", style: .cancel, handler: { (alert: UIAlertAction!) in
-            self.myJSONHandler.currentQuestion = 0
-            self.myJSONHandler.currentURLIndex += 1
-            self.myJSONHandler.gameOver = false
-            self.enableChoiceLbls()
-            self.unsetFirstAndSecondTap()
-            self.nextQuestion()
-        }))
-        self.present(temporaryAlert, animated: true, completion: nil)
+        playAgainBtn.isHidden = false
+        timer.invalidate()
+        if (myScore >= pOneScore && myScore >= pTwoScore && myScore >= pThreeScore) {
+            timerLbl.text = "You WIN!"
+            if (myScore == pOneScore || myScore == pTwoScore || myScore == pThreeScore) {
+                timerLbl.text = "You're a WINNER"
+            }
+        }
+        else {
+            timerLbl.text = "You LOSE!"
+        }
     }
     
     func nextQuestion() {
+        playAgainBtn.isHidden = true
+        numAnswers = 0
+        timerLbl.text = "Seconds: \(secondsLeft)"
         clearAnswerLbls()
         myJSONHandler.testGrabJSON()
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerHandler), userInfo: nil, repeats: true)
@@ -541,6 +586,13 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
         secondTappedLbl = nil
     }
     
+    func unsetPlayerAnswers() {
+        myAnswer = nil
+        pOneAnswer = nil
+        pTwoAnswer = nil
+        pThreeAnswer = nil
+    }
+    
     func highlightSelection(lbl: UILabel) {
         ALbl.backgroundColor = UIColor.clear
         BlBl.backgroundColor = UIColor.clear
@@ -558,10 +610,11 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
     }
     
     func checkMyTapForCorrectness(lbl: UILabel) {
+        numAnswers += 1
         if var lblText = lbl.text {
             let charForMyAnswerLbl = lblText.remove(at: lblText.startIndex)
             myAnswer = "\(charForMyAnswerLbl)"
-            //myAnswerLbl.text = "\(charForMyAnswerLbl)"
+            myAnswerLbl.text = "\(charForMyAnswerLbl)"
         }
         if let tempLblText = lbl.text,
             let tempHiddenCorrectLblText = hiddenCorrectAnswerLbl.text {
@@ -619,6 +672,18 @@ class MultiPlayerVC: UIViewController, MCSessionDelegate {
         default:
             print("unexpected default when updating playerImages")
         }
+    }
+    
+    func resetScores() {
+        myScore = 0
+        pOneScore = 0
+        pTwoScore = 0
+        pThreeScore = 0
+        
+        myScoreLbl.text = "\(myScore)"
+        pOneScoreLbl.text = "\(pOneScore)"
+        pTwoScoreLbl.text = "\(pTwoScore)"
+        pThreeScoreLbl.text = "\(pThreeScore)"
     }
     
     override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {

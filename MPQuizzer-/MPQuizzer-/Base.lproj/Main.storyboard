@@ -220,8 +220,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Seconds: 20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j8e-Od-mii">
-                                <rect key="frame" x="100" y="439" width="121" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Seconds: 20" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j8e-Od-mii">
+                                <rect key="frame" x="33" y="439" width="203" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -234,6 +234,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WK2-I5-IwV">
+                                <rect key="frame" x="244" y="434" width="76" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Play Again"/>
+                                <connections>
+                                    <action selector="playAgainTapped:" destination="8aN-T5-YAR" eventType="touchUpInside" id="j2q-WP-aMy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="goH-ZF-0jD"/>
@@ -255,6 +263,7 @@
                         <outlet property="pTwoAnswerLbl" destination="h6Q-ic-VLo" id="lN5-ct-Ife"/>
                         <outlet property="pTwoScoreLbl" destination="Bah-WR-Pp0" id="oNP-gC-0xm"/>
                         <outlet property="pTwoView" destination="hpu-13-JiC" id="wME-uC-VkH"/>
+                        <outlet property="playAgainBtn" destination="WK2-I5-IwV" id="cJf-PO-gPo"/>
                         <outlet property="questionLbl" destination="lGW-OC-L2P" id="tQ5-rw-AbZ"/>
                         <outlet property="timerLbl" destination="j8e-Od-mii" id="qIl-cj-hUc"/>
                         <segue destination="aYe-sA-YRg" kind="unwind" identifier="unwindToVC" unwindAction="unwindToVCWithSegue:" id="jh4-iz-CV9"/>
@@ -342,9 +351,11 @@
                         <outlet property="questionLbl" destination="nzj-go-euf" id="byu-Gr-yEh"/>
                         <outlet property="scoreLbl" destination="XrS-Fi-Zuc" id="Adf-0E-9nd"/>
                         <outlet property="timerLbl" destination="Z4L-Tk-R07" id="aNq-hW-U4F"/>
+                        <segue destination="aaT-Yi-3QB" kind="unwind" identifier="unwindToVC" unwindAction="unwindToVCWithSegue:" id="gMv-Jy-z2C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0cm-Cy-JXJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="aaT-Yi-3QB" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1955.625" y="-216.25"/>
         </scene>

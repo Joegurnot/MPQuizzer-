@@ -258,7 +258,11 @@ class SinglePlayerVC: UIViewController {
     @objc func gameOverHandler() {
         let temporaryAlert = UIAlertController(title: "ALERT", message: "Handle end of game", preferredStyle: .alert)
         //temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (alert: UIAlertAction!) in
+        temporaryAlert.addAction(UIAlertAction(title: "Quit", style: .default, handler: { (alert: UIAlertAction!) in
+            myMultipeerHandler.session.disconnect()
+            self.performSegue(withIdentifier: "unwindToVC", sender: self)
+        }))
+        temporaryAlert.addAction(UIAlertAction(title: "Play Again", style: .cancel, handler: { (alert: UIAlertAction!) in
             self.myJSONHandler.currentQuestion = 0
             self.myJSONHandler.currentURLIndex += 1
             self.myJSONHandler.gameOver = false
