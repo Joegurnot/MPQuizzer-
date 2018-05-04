@@ -49,6 +49,8 @@ class SinglePlayerVC: UIViewController {
     
     var motionTimer: Timer!
     
+    var heading: Double?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,7 +82,8 @@ class SinglePlayerVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         motionManager.deviceMotionUpdateInterval = 1/60
-        motionManager.startDeviceMotionUpdates(using: .xArbitraryZVertical)
+        motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical)
+        
         
         motionTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateDeviceMotion), userInfo: nil, repeats: true)
     }
@@ -134,8 +137,12 @@ class SinglePlayerVC: UIViewController {
             
             //let rotation = data.rotationRate
             
-            print("pitch: \(attitude.pitch), roll: \(attitude.roll), yaw: \(attitude.yaw)")
+            //print("pitch: \(attitude.pitch), roll: \(attitude.roll), yaw: \(attitude.yaw)")
             
+            if (heading == nil && motionManager.deviceMotion?.heading != 0.0) {
+                heading = motionManager.deviceMotion?.heading
+                printHeading()
+            }
             
             //var str = "Pitch: \(attitude.pitch)\n Roll: \(attitude.roll) \nYaw: \(attitude.yaw)"
             
@@ -459,6 +466,10 @@ class SinglePlayerVC: UIViewController {
         }
     }
     
+    func printHeading() {
+        let head = motionManager.deviceMotion?.heading
+        print("\n\n\nHEADING: \(head!)\n\n\n")
+    }
     
     
 }
