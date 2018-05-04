@@ -15,8 +15,9 @@ class JSONHandler {
     let sharedSession = URLSession.shared
     
     //used to track which URL in the arrayOfURLs we're currently using
-    var currentURLIndex: Int = 0
-    let arrayOfURLs: [String] = ["http://www.people.vcu.edu/~ebulut/jsonFiles/quiz1.json", "http://www.people.vcu.edu/~ebulut/jsonFiles/quiz2.json"]
+    var currentURLIndex: Int = 2
+    //let arrayOfURLs: [String] = ["http://www.people.vcu.edu/~ebulut/jsonFiles/quiz1.json", "http://www.people.vcu.edu/~ebulut/jsonFiles/quiz2.json"]
+    var myURL:String!
     
     //used to track the current question
     var currentQuestion: Int = 0
@@ -87,9 +88,10 @@ class JSONHandler {
             }
         }
         
-        let urlString = arrayOfURLs[currentURLIndex]
+        //let urlString = arrayOfURLs[currentURLIndex]
+        myURL = "http://www.people.vcu.edu/~ebulut/jsonFiles/quiz\(currentURLIndex).json"
         
-        let url = URL(string: urlString)
+        let url = URL(string: myURL)
         
         let session = self.sharedSession
         //let session = URLSession.shared
@@ -103,55 +105,61 @@ class JSONHandler {
                 do {
                     let json = try JSONSerialization.jsonObject(with: result, options: .allowFragments)
                     
-                    if let dictionary = json as? [String:Any] {
-                        //print("\(dictionary["numberOfQuestions"]!)")
-                        if let tempNumQuestions = dictionary["numberOfQuestions"] as? Int {
-                            //print("tempNumQuestions is Int, \(tempNumQuestions)")
-                            DispatchQueue.main.async(execute: {
-                                self.setNumQuestions(num: tempNumQuestions)
-                                self.questionCounterLbl.text = "Question \(self.currentQuestion)/\(self.numQuestions!)"
-                                //if let optLabel = uiv as? UILabel {
-                                //    optLabel.text = "\(tempNumQuestions)"
-                                //}
-                            })
-                            //self.setNumQuestions(num: tempNumQuestions)
-                        }
-                        if let tempQuestionsDict = dictionary["questions"] as? [[String: Any]] {
-                            //print("\(tempQuestionsDict)")
-                            for element in tempQuestionsDict {
-                                if let tempQuestionNum = element["number"] as? Int,
-                                    let tempQuestionSentence = element["questionSentence"] as? String,
-                                    let tempOptions = element["options"] as? [String: String],
-                                    let tempCorrectOption = element["correctOption"] as? String {
-                                    //print("tempQuestionNum: \(tempQuestionNum)")
-                                    if tempQuestionNum == self.currentQuestion {
-                                        print(tempQuestionSentence)
-                                        print("tempOptions: \(tempOptions)")
-                                        DispatchQueue.main.async(execute: {
-                                            self.questionLbl.text = tempQuestionSentence
-                                            self.aAnswerLbl.text = "A)" + tempOptions["A"]!
-                                            self.bAnswerLbl.text = "B)" + tempOptions["B"]!
-                                            self.cAnswerLbl.text = "C)" + tempOptions["C"]!
-                                            self.dAnswerLbl.text = "D)" + tempOptions["D"]!
-                                            
-                                            switch tempCorrectOption {
-                                            case "A" :
-                                                print("A is correct")
-                                                self.hiddenCorrectLbl.text = self.aAnswerLbl.text
-                                            case "B":
-                                                print("B is correct")
-                                                self.hiddenCorrectLbl.text = self.bAnswerLbl.text
-                                            case "C":
-                                                print("C is correct")
-                                                self.hiddenCorrectLbl.text = self.cAnswerLbl.text
-                                            case "D":
-                                                print("D is correct")
-                                                self.hiddenCorrectLbl.text = self.dAnswerLbl.text
-                                            default:
-                                                print("Unexpected default in tempCorrectOption")
-                                            }
-                                        })
-                                        
+                    if !JSONSerialization.isValidJSONObject(json) {
+                        self.currentURLIndex = 1
+                        self.gameOver = true
+                        print("\n\nINVALID JSON\n\n")
+                    }
+                    else {
+                        if let dictionary = json as? [String:Any] {
+                            //print("\(dictionary["numberOfQuestions"]!)")
+                            if let tempNumQuestions = dictionary["numberOfQuestions"] as? Int {
+                                //print("tempNumQuestions is Int, \(tempNumQuestions)")
+                                DispatchQueue.main.async(execute: {
+                                    self.setNumQuestions(num: tempNumQuestions)
+                                    self.questionCounterLbl.text = "Question \(self.currentQuestion)/\(self.numQuestions!)"
+                                    //if let optLabel = uiv as? UILabel {
+                                    //    optLabel.text = "\(tempNumQuestions)"
+                                    //}
+                                })
+                                //self.setNumQuestions(num: tempNumQuestions)
+                            }
+                            if let tempQuestionsDict = dictionary["questions"] as? [[String: Any]] {
+                                //print("\(tempQuestionsDict)")
+                                for element in tempQuestionsDict {
+                                    if let tempQuestionNum = element["number"] as? Int,
+                                        let tempQuestionSentence = element["questionSentence"] as? String,
+                                        let tempOptions = element["options"] as? [String: String],
+                                        let tempCorrectOption = element["correctOption"] as? String {
+                                        //print("tempQuestionNum: \(tempQuestionNum)")
+                                        if tempQuestionNum == self.currentQuestion {
+                                            print(tempQuestionSentence)
+                                            print("tempOptions: \(tempOptions)")
+                                            DispatchQueue.main.async(execute: {
+                                                self.questionLbl.text = tempQuestionSentence
+                                                self.aAnswerLbl.text = "A)" + tempOptions["A"]!
+                                                self.bAnswerLbl.text = "B)" + tempOptions["B"]!
+                                                self.cAnswerLbl.text = "C)" + tempOptions["C"]!
+                                                self.dAnswerLbl.text = "D)" + tempOptions["D"]!
+                                                
+                                                switch tempCorrectOption {
+                                                case "A" :
+                                                    print("A is correct")
+                                                    self.hiddenCorrectLbl.text = self.aAnswerLbl.text
+                                                case "B":
+                                                    print("B is correct")
+                                                    self.hiddenCorrectLbl.text = self.bAnswerLbl.text
+                                                case "C":
+                                                    print("C is correct")
+                                                    self.hiddenCorrectLbl.text = self.cAnswerLbl.text
+                                                case "D":
+                                                    print("D is correct")
+                                                    self.hiddenCorrectLbl.text = self.dAnswerLbl.text
+                                                default:
+                                                    print("Unexpected default in tempCorrectOption")
+                                                }
+                                            })
+                                        }
                                     }
                                 }
                             }
@@ -160,6 +168,11 @@ class JSONHandler {
                 }
                 catch {
                     print(error)
+                    self.currentURLIndex = 1
+                    self.currentQuestion = 0
+                    self.testGrabJSON()
+                    print("\n\nERROR\n\n")
+                    
                 }
             }
         }

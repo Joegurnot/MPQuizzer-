@@ -257,9 +257,11 @@
                         <outlet property="pTwoView" destination="hpu-13-JiC" id="wME-uC-VkH"/>
                         <outlet property="questionLbl" destination="lGW-OC-L2P" id="tQ5-rw-AbZ"/>
                         <outlet property="timerLbl" destination="j8e-Od-mii" id="qIl-cj-hUc"/>
+                        <segue destination="aYe-sA-YRg" kind="unwind" identifier="unwindToVC" unwindAction="unwindToVCWithSegue:" id="jh4-iz-CV9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UDM-dc-u7S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="aYe-sA-YRg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1955.625" y="542.5"/>
         </scene>

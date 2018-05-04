@@ -190,13 +190,8 @@ class ViewController: UIViewController, MCBrowserViewControllerDelegate, MCSessi
         
     }
     
+    @IBAction func unwindToVC(segue:UIStoryboardSegue) { }
     
-    /*
-    func sendLetter(String: UILabel) {
-        if myMultipeerHandler.session.connectedPeers.count > 0 {
-            //if let letter =
-        }
-    }
-     */
+    
 }
 

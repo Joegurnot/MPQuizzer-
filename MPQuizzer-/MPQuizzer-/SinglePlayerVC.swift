@@ -35,8 +35,8 @@ class SinglePlayerVC: UIViewController {
     var hiddenCorrectAnswerLbl: UILabel = UILabel(frame: CGRect(x: 1, y: 1, width: 1, height: 1))
     
     var timer: Timer!
-    //var secondsLeft: Int = 20
-    var secondsLeft: Int = 5
+    var secondsLeft: Int = 20
+    //var secondsLeft: Int = 5
     
     var score: Int = 0
     
@@ -86,12 +86,12 @@ class SinglePlayerVC: UIViewController {
     }
     
     @objc func timerHandler() {
-        timerLbl.text = "Seconds: \(secondsLeft)"
         secondsLeft -= 1
-        if secondsLeft == -1 {
+        timerLbl.text = "Seconds: \(secondsLeft)"
+        if secondsLeft == 0 || firstTappedLbl?.backgroundColor == UIColor.blue{
             timer.invalidate()
-            //secondsLeft = 20
-            secondsLeft = 5
+            secondsLeft = 20
+            //secondsLeft = 5
             
             enableChoiceLbls()
             unsetFirstAndSecondTap()
@@ -232,6 +232,7 @@ class SinglePlayerVC: UIViewController {
     */
     
     func nextQuestion() {
+        timerLbl.text = "Seconds: \(secondsLeft)"
         myJSONHandler.testGrabJSON()
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerHandler), userInfo: nil, repeats: true)
         clearSubmission()
@@ -243,12 +244,12 @@ class SinglePlayerVC: UIViewController {
     }
     
     @objc func lastQuestionTimerHandler() {
-        timerLbl.text = "Seconds: \(secondsLeft)"
         secondsLeft -= 1
-        if (secondsLeft == -1) {
+        timerLbl.text = "Seconds: \(secondsLeft)"
+        if (secondsLeft == 0 || firstTappedLbl?.backgroundColor == UIColor.blue) {
             timer.invalidate()
-            //secondsLeft = 20
-            secondsLeft = 5
+            secondsLeft = 20
+            //secondsLeft = 5
             
             gameOverHandler()
         }
@@ -260,9 +261,6 @@ class SinglePlayerVC: UIViewController {
         temporaryAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (alert: UIAlertAction!) in
             self.myJSONHandler.currentQuestion = 0
             self.myJSONHandler.currentURLIndex += 1
-            if (self.myJSONHandler.currentURLIndex == self.myJSONHandler.arrayOfURLs.count) {
-                self.myJSONHandler.currentURLIndex = 0
-            }
             self.myJSONHandler.gameOver = false
             self.enableChoiceLbls()
             self.unsetFirstAndSecondTap()
